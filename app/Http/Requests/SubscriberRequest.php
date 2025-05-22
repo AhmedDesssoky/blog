@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use App\Helpers\ApiResponse;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
-class StoreBlogRequest extends FormRequest
+class SubscriberRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,8 +15,7 @@ class StoreBlogRequest extends FormRequest
     {
         return true;
     }
-
-    protected function failedValidation(Validator $validator)
+     protected function failedValidation(Validator $validator)
     {
         if($this->is('api/*'))
         {
@@ -24,25 +23,18 @@ class StoreBlogRequest extends FormRequest
             throw new ValidationException($validator,$response);
         }
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+   public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'image' => 'required|mimes:png,jpg',
-            'category_id' => 'required|exists:categories,id',
-            'description' => 'required',
-        ];
-    }
-
-    public function attributes(): array
-    {
-        return [
-            'category_id' => 'category',
+           
+            'email' => 'required|email|unique:subscribers,email',
+       
         ];
     }
 }
